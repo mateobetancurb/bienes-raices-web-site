@@ -1,0 +1,26 @@
+{
+  "name": "bienes-raices-web-site",
+  "version": "1.0.0",
+  "description": "sitio web de bienes raices",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [
+    "MVC",
+    "Pug",
+    "MySQL",
+    "Sequelize",
+    "Tailwind"
+  ],
+  "author": "Mateo",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
