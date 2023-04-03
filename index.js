@@ -9,7 +9,7 @@ app.set("view engine", "pug");
 app.set("views", "./views");
 
 //routing
-app.use("/", usuarioRoutes);
+app.use("/auth", usuarioRoutes);
 
 //definir un puerto y arrancar
 const port = 3000;
