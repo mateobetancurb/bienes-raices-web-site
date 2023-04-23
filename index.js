@@ -11,6 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 //conexion db
 try {
 	db.authenticate();
+	db.sync();
 	console.log("database connected");
 } catch (error) {
 	console.log(error);
