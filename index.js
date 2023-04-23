@@ -5,6 +5,9 @@ const db = require("./config/db.js");
 //crear la app
 const app = express();
 
+//habilitar lectura datos formularios
+app.use(express.urlencoded({ extended: true }));
+
 //conexion db
 try {
 	db.authenticate();
