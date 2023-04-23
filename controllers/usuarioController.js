@@ -25,12 +25,12 @@ const registrar = async (req, res) => {
 		.run(req);
 
 	await check("password")
-		.isLength({ min: 6 })
-		.withMessage("La contraseña debe más de 5 caracteres")
+		.isLength({ min: 1 })
+		.withMessage("La contraseña debe tener más de 1 caracter")
 		.run(req);
 
-	await check("password")
-		.equals("password")
+	await check("repetir_password")
+		.equals(req.body.password)
 		.withMessage("Las contraseñas deben ser iguales")
 		.run(req);
 
@@ -40,11 +40,30 @@ const registrar = async (req, res) => {
 		return res.render("auth/registro", {
 			pagina: "Crear cuenta",
 			errores: resultado.array(),
+			usuario: {
+				nombre: req.body.nombre,
+				email: req.body.email,
+			},
+		});
+	}
+
+	const existeUsuario = await Usuario.findOne({
+		where: { email: req.body.email },
+	});
+
+	if (existeUsuario) {
+		return res.render("auth/registro", {
+			pagina: "Crear cuenta",
+			errores: [{ msg: "Este usuario ya está registrado" }],
+			usuario: {
+				nombre: req.body.nombre,
+				email: req.body.email,
+			},
 		});
 	}
 
 	const usuario = await Usuario.create(req.body);
-	res.json(usuario);
+	res.status(201).json(usuario);
 };
 
 const formularioOlvidePassword = (req, res) => {
