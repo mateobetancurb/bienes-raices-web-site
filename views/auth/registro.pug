@@ -16,10 +16,10 @@ block contenido
         form.space-y-5(method="POST" action="/auth/registro")
           div
             label.block.text-sm.text-gray-700.mb-2.font-bold(for="nombre") Nombre
-            input#nombre.w-full.px-3.py-2.border.border-gray-300.rounded-md(type="text" name="nombre")
+            input#nombre.w-full.px-3.py-2.border.border-gray-300.rounded-md(type="text" name="nombre" value=usuario ? usuario.nombre : "")
           div
             label.block.text-sm.text-gray-700.mb-2.font-bold(for="email") Correo electrónico
-            input#email.w-full.px-3.py-2.border.border-gray-300.rounded-md(type="email" name="email")
+            input#email.w-full.px-3.py-2.border.border-gray-300.rounded-md(type="email" name="email" value=usuario ? usuario.email : "")
           div
             label.block.text-sm.text-gray-700.mb-2.font-bold(for="password") Contraseña
             input#password.w-full.px-3.py-2.border.border-gray-300.rounded-md(type="password" name="password")
