@@ -1,5 +1,7 @@
 const { check, validationResult } = require("express-validator");
 const Usuario = require("../models/Usuario.js");
+const { generarId } = require("../helpers/tokens.js");
+const { emailRegistro } = require("../helpers/emails.js");
 
 const formularioLogin = (req, res) => {
 	res.render("auth/login", {
@@ -66,11 +68,50 @@ const registrar = async (req, res) => {
 	const { nombre, email, password } = req.body;
 
 	// crear el usuario si pasa todas las validaciones
-	await Usuario.create({
+	const usuario = await Usuario.create({
 		nombre,
 		email,
 		password,
-		token: 123,
+		token: generarId(),
+	});
+
+	//envia email de confirmacion
+	emailRegistro({
+		nombre: usuario.nombre,
+		email: usuario.email,
+		token: usuario.token,
+	});
+
+	//mostrar mensaje de confirmacion
+	res.render("templates/mensaje", {
+		pagina: "Verificar cuenta",
+		mensaje: "Te acabamos de enviar un correo para que confirmes tu cuenta",
+	});
+};
+
+//funcion que confirma una cuenta
+const confirmarCuenta = async (req, res) => {
+	const { token } = req.params;
+
+	//verificar si el token es valido
+	const usuario = await Usuario.findOne({ where: { token } });
+
+	if (!usuario) {
+		return res.render("auth/confirmar-cuenta", {
+			pagina: "Error al confirmar tu cuenta",
+			mensaje: "Hubo un error al confirmar tu cuenta. Intenta de nuevo",
+			error: true,
+		});
+	}
+
+	//confirmar cuenta
+	usuario.token = null;
+	usuario.confirmado = true;
+	await usuario.save();
+
+	return res.render("auth/confirmar-cuenta", {
+		pagina: "Cuenta confirmada",
+		mensaje: "Se confirmó tu cuenta",
 	});
 };
 
@@ -84,5 +125,6 @@ module.exports = {
 	formularioLogin,
 	formularioRegistro,
 	registrar,
+	confirmarCuenta,
 	formularioOlvidePassword,
 };
