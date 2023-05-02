@@ -1,7 +1,7 @@
 const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 const Usuario = require("../models/Usuario.js");
-const { generarId } = require("../helpers/tokens.js");
+const { generarJWT, generarId } = require("../helpers/tokens.js");
 const {
 	emailRegistro,
 	emailResetearPassword,
@@ -38,7 +38,6 @@ const autenticarUsuario = async (req, res) => {
 	const usuario = await Usuario.findOne({
 		where: { email: req.body.email },
 	});
-	console.log(usuario);
 
 	if (!usuario) {
 		return res.render("auth/login", {
@@ -69,10 +68,19 @@ const autenticarUsuario = async (req, res) => {
 				},
 			],
 		});
-  }
+	}
 
-  //autenticar usuario
-  
+	//autenticar usuario
+	const token = generarJWT({ id: usuario.id, nombre: usuario.nombre });
+
+	//almacenar el JWT en una cookie
+	return res
+		.cookie("_token", token, {
+			httpOnly: true,
+			// secure: true,
+			// sameSite: true,
+		})
+		.redirect("/mis-propiedades");
 };
 
 const formularioRegistro = (req, res) => {
