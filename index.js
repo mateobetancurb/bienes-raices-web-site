@@ -1,4 +1,5 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const usuarioRoutes = require("./routes/usuarioRoutes.js");
 const db = require("./config/db.js");
 
@@ -7,6 +8,9 @@ const app = express();
 
 //habilitar lectura datos formularios
 app.use(express.urlencoded({ extended: true }));
+
+//habilitar cookie-parser
+app.use(cookieParser());
 
 //conexion db
 try {
