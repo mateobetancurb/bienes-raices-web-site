@@ -13,6 +13,68 @@ const formularioLogin = (req, res) => {
 	});
 };
 
+const autenticarUsuario = async (req, res) => {
+	//validando formulario
+	await check("email")
+		.isEmail()
+		.withMessage("Escribe un correo válido")
+		.run(req);
+
+	await check("password")
+		.notEmpty()
+		.withMessage("Ingresa tu contraseña")
+		.run(req);
+
+	let resultado = validationResult(req);
+
+	if (!resultado.isEmpty()) {
+		return res.render("auth/login", {
+			pagina: "Iniciar sesión",
+			errores: resultado.array(),
+		});
+	}
+
+	//validando que el usuario exista
+	const usuario = await Usuario.findOne({
+		where: { email: req.body.email },
+	});
+	console.log(usuario);
+
+	if (!usuario) {
+		return res.render("auth/login", {
+			pagina: "Iniciar sesión",
+			errores: [{ msg: "Credenciales inválidas" }],
+		});
+	}
+
+	//validar si el usuario esta confirmado
+	if (!usuario.confirmado) {
+		return res.render("auth/login", {
+			pagina: "Iniciar sesión",
+			errores: [
+				{
+					msg: "Tu cuenta de usuario no ha sido confirmada. Revisa tu correo",
+				},
+			],
+		});
+	}
+
+	//validar contraseña
+	if (!usuario.verificarPassword(req.body.password)) {
+		return res.render("auth/login", {
+			pagina: "Iniciar sesión",
+			errores: [
+				{
+					msg: "Credenciales inválidas",
+				},
+			],
+		});
+  }
+
+  //autenticar usuario
+  
+};
+
 const formularioRegistro = (req, res) => {
 	res.render("auth/registro", {
 		pagina: "Crear cuenta",
@@ -93,7 +155,6 @@ const registrar = async (req, res) => {
 	});
 };
 
-//funcion que confirma una cuenta
 const confirmarCuenta = async (req, res) => {
 	const { token } = req.params;
 
@@ -224,6 +285,7 @@ const nuevoPassword = async (req, res) => {
 
 module.exports = {
 	formularioLogin,
+	autenticarUsuario,
 	formularioRegistro,
 	registrar,
 	confirmarCuenta,
