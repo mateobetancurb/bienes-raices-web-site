@@ -1,6 +1,7 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const usuarioRoutes = require("./routes/usuarioRoutes.js");
+const propieadesRoutes = require("./routes/propiedadesRoutes.js");
 const db = require("./config/db.js");
 
 //crear la app
@@ -30,6 +31,7 @@ app.use(express.static("public"));
 
 //routing
 app.use("/auth", usuarioRoutes);
+app.use("/", propieadesRoutes);
 
 //definir un puerto y arrancar
 const port = process.env.PORT || 3000;
