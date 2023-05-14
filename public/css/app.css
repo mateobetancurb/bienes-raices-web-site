@@ -546,6 +546,9 @@ video {
 .flex {
   display: flex;
 }
+.h-96 {
+  height: 24rem;
+}
 .w-\[20rem\] {
   width: 20rem;
 }
