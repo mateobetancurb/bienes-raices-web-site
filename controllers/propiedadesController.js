@@ -5,6 +5,14 @@ const admin = (req, res) => {
 	});
 };
 
+const crearPropiedad = (req, res) => {
+  	res.render("propiedades/crear", {
+			pagina: "Mis propiedades",
+			barra: true,
+		});
+};
+
 module.exports = {
 	admin,
+	crearPropiedad,
 };
