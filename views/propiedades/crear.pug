@@ -1,5 +1,8 @@
 extends ../layout/index
 
+block styles
+  link(rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css")
+
 block contenido
   div.py-5
     h1.text-4xl.mb-5.font-extrabold.text-center Bienes
@@ -53,6 +56,7 @@ block contenido
                 - let banos = 1;
                     while banos < 6
                       option(value=banos) #{banos++}
+        #mapa.w-full.h-96
 
 block scripts
     script(src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js")

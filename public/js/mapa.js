@@ -15,7 +15,7 @@
   \************************/
 /***/ (() => {
 
-eval("alert(\"soy el mapa\")\n\n//# sourceURL=webpack://bienes-raices-web-site/./src/js/mapa.js?");
+eval("(function () {\n\tconst lat = 6.2476;\n\tconst lng = -75.5658;\n\tconst mapa = L.map(\"mapa\").setView([lat, lng], 14);\n\n\tL.tileLayer(\"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png\", {\n\t\tattribution:\n\t\t\t'&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors',\n\t}).addTo(mapa);\n})();\n\n\n//# sourceURL=webpack://bienes-raices-web-site/./src/js/mapa.js?");
 
 /***/ })
 
