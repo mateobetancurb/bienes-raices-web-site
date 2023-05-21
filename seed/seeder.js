@@ -1,8 +1,7 @@
 const categorias = require("./categorias.js");
-const Categoria = require("../models/Categoria.js");
 const precios = require("./precios.js");
-const Precio = require("../models/Precio.js");
 const db = require("../config/db.js");
+const { Categoria, Precio } = require("../models/index.js");
 
 const importarDatos = async () => {
 	try {
@@ -28,6 +27,11 @@ const importarDatos = async () => {
 const eliminarDatos = async () => {
 	try {
 		await db.sync({ force: true });
+		// await Promise.all([
+		// 	Categoria.destroy({ truncate: true }),
+		// 	Precio.destroy({ truncate: true }),
+		// ]);
+
 		process.exit(0);
 	} catch (error) {
 		console.log(error);
