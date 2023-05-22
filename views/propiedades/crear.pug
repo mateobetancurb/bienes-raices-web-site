@@ -9,8 +9,13 @@ block contenido
       span.font-normal Raíces
     h2.font-bold.text-xl.text-center= pagina
 
+    if errores
+      div(class="max-w-md mx-auto my-10")
+        each error in errores
+          p.bg-red-200.text-red-900.rounded-lg.text-sm.text-center.font-bold.p-3.mb-1=error.msg
+
     div(class="bg-white shadow py-8 px-4 rounded mx-auto max-w-4xl my-10")
-      form.space-y-8
+      form.space-y-8(method="POST" action="/propiedades/crear" enctype="multipart/form-data")
         div.space-y-5
           h3.text-lg.leading-6.font-medium.text-gray-900.text-center Información General
           p.text-gray-600.text-center Añade información sobre la propiedad en venta
@@ -76,6 +81,8 @@ block contenido
           input(type="hidden" name="calle" id="calle")
           input(type="hidden" name="lat" id="lat")
           input(type="hidden" name="lng" id="lng")
+
+        input(class="bg-indigo-600 hover:bg-indigo-700 transition-all w-full p-2 text-white font-bold rounded cursor-pointer" type="submit" value="Añadir imagen")
 
 block scripts
     script(src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js")
