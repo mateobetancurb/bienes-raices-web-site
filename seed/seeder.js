@@ -1,7 +1,8 @@
 const categorias = require("./categorias.js");
 const precios = require("./precios.js");
+const usuarios = require("./usuarios.js");
 const db = require("../config/db.js");
-const { Categoria, Precio } = require("../models/index.js");
+const { Categoria, Precio, Usuario } = require("../models/index.js");
 
 const importarDatos = async () => {
 	try {
@@ -14,7 +15,8 @@ const importarDatos = async () => {
 		//insertar datos
 		await Promise.all([
 			Categoria.bulkCreate(categorias),
-			Precio.bulkCreate(precios),
+      Precio.bulkCreate(precios),
+      Usuario.bulkCreate(usuarios),
 		]);
 
 		process.exit(0);
