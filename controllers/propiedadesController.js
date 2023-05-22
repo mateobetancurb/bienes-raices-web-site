@@ -1,6 +1,5 @@
 const { check, validationResult } = require("express-validator");
-const Precio = require("../models/Precio.js");
-const Categoria = require("../models/Categoria.js");
+const { Categoria, Precio, Propiedad } = require("../models/index.js");
 
 const admin = (req, res) => {
 	res.render("propiedades/admin", {
@@ -46,7 +45,7 @@ const guardarPropiedad = async (req, res) => {
 		.isNumeric()
 		.withMessage("Selecciona la cantidad de habitaciones")
 		.run(req);
-	await check("estacionamientos")
+	await check("estacionamiento")
 		.isNumeric()
 		.withMessage("Selecciona la cantidad de parqueaderos")
 		.run(req);
@@ -75,6 +74,29 @@ const guardarPropiedad = async (req, res) => {
 			errores: resultado.array(),
 			datos: req.body,
 		});
+	}
+
+	//crear la propiedad
+	try {
+		const propiedadGuardada = await Propiedad.create({
+			titulo: req.body.titulo,
+			descripcion: req.body.descripcion,
+			habitaciones: req.body.habitaciones,
+			estacionamiento: req.body.estacionamiento,
+			banos: req.body.banos,
+			calle: req.body.calle,
+			lat: req.body.lat,
+			lng: req.body.lng,
+			precioId: req.body.precio,
+			categoriaId: req.body.categoria,
+			usuarioId: req.usuario.id,
+			imagen: "imagen.jpg",
+    });
+
+    const { id } = propiedadGuardada;
+    res.redirect(`/propiedades/agregar-imagen/${id}`);
+	} catch (error) {
+		console.log(error);
 	}
 };
 
