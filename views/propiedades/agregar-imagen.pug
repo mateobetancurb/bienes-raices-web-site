@@ -12,7 +12,7 @@ block contenido
     div(class="bg-white shadow py-8 px-4 rounded mx-auto max-w-4xl my-10")
       form(id="imagen" class="dropzone border-dashed border-2 w-full min:h-96 h-auto rounded flex-col justify-center items-center" method="POST" action=`/propiedades/agregar-imagen/${propiedad.id}`)
 
-      input(class="bg-indigo-600 hover:bg-indigo-700 transition-all w-full p-2 mt-5 text-white font-bold rounded cursor-pointer" type="submit" value="Publicar propiedad")
+      button(id="publicar" class="bg-indigo-600 hover:bg-indigo-700 transition-all w-full p-2 mt-5 text-white font-bold rounded cursor-pointer" type="button") Publicar propiedad
 
 block scripts
   script(src="/js/agregarImagen.js")
