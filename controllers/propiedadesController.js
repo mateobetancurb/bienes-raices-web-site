@@ -121,9 +121,41 @@ const agregarImagen = async (req, res) => {
 	});
 };
 
+const almacenarImagen = async (req, res) => {
+	//validar que la propiedad exista
+	const propiedad = await Propiedad.findByPk(req.params.id);
+
+	if (!propiedad) {
+		return res.redirect("/mis-propiedades");
+	}
+
+	//validar que la propiedad no este publicada
+	if (propiedad.publicado) {
+		return res.redirect("/mis-propiedades");
+	}
+
+	//propiedad pertenece al usuario
+	if (propiedad.usuarioId !== req.usuario.id) {
+		return res.redirect("/mis-propiedades");
+	}
+
+	try {
+		//almacenar la imagen en el servidor y publicar la propiedad
+		if (req.file) {
+			propiedad.imagen = req.file.filename;
+			propiedad.publicado = 1;
+		}
+		await propiedad.save();
+		res.redirect("/mis-propiedades");
+	} catch (error) {
+		console.log(error);
+	}
+};
+
 module.exports = {
 	admin,
 	crearPropiedad,
 	guardarPropiedad,
 	agregarImagen,
+	almacenarImagen,
 };
