@@ -25,7 +25,7 @@ eval("(function webpackUniversalModuleDefinition(root, factory) {\n\tif(true)\n\
   \*********************************/
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("const { Dropzone } = __webpack_require__(/*! dropzone */ \"./node_modules/dropzone/dist/dropzone.js\");\n\nDropzone.options.imagen = {\n\tdictDefaultMessage: \"Sube aquí tus imágenes\",\n\tacceptedFiles: \".png,.jpg,.jpeg\",\n\tmaxFilesize: 5,\n  maxFiles: 1,\n  parallelUploads: 1,\n  autoProcessQueue: false,\n  addRemoveLinks: true,\n  dictRemoveFile: \"Eliminar imagen\",\n  dictMaxFilesExceeded: \"Sólo puedes subir una imagen\",\n};\n\n\n//# sourceURL=webpack://bienes-raices-web-site/./src/js/agregarImagen.js?");
+eval("const { Dropzone } = __webpack_require__(/*! dropzone */ \"./node_modules/dropzone/dist/dropzone.js\");\n\nDropzone.options.imagen = {\n\tdictDefaultMessage: \"Sube aquí tus imágenes\",\n\tacceptedFiles: \".png,.jpg,.jpeg\",\n\tmaxFilesize: 5,\n\tmaxFiles: 1,\n\tparallelUploads: 1,\n\tautoProcessQueue: false,\n\taddRemoveLinks: true,\n\tdictRemoveFile: \"Eliminar imagen\",\n\tdictMaxFilesExceeded: \"Sólo puedes subir una imagen\",\n\tparamName: \"imagen\",\n\tinit: function () {\n\t\tconst dropzone = this;\n\t\tconst btnPublicar = document.getElementById(\"publicar\");\n\n\t\tbtnPublicar.addEventListener(\"click\", function () {\n\t\t\tdropzone.processQueue();\n\t\t});\n\n\t\tdropzone.on(\"queuecomplete\", function () {\n\t\t\tif (dropzone.getActiveFiles().length == 0) {\n\t\t\t\twindow.location.href = \"/mis-propiedades\";\n\t\t\t}\n\t\t});\n\t},\n};\n\n\n//# sourceURL=webpack://bienes-raices-web-site/./src/js/agregarImagen.js?");
 
 /***/ })
 
