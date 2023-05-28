@@ -7,7 +7,8 @@ const {
 	agregarImagen,
 	almacenarImagen,
 	editarPropiedad,
-	guardarPropiedadEditada,
+  guardarPropiedadEditada,
+  eliminarPropiedad
 } = require("../controllers/propiedadesController.js");
 const protegerRuta = require("../middlewares/protegerRuta.js");
 const upload = require("../middlewares/subirImagen.js");
@@ -24,5 +25,6 @@ router.post(
 );
 router.get("/propiedades/editar/:id", protegerRuta, editarPropiedad);
 router.post("/propiedades/editar/:id", protegerRuta, guardarPropiedadEditada);
+router.post("/propiedades/eliminar/:id", protegerRuta, eliminarPropiedad);
 
 module.exports = router;
