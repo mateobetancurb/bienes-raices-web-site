@@ -36,7 +36,7 @@ block contenido
 
                       a(href=`/propiedades/editar/${propiedad.id}` class="text-center cursor-pointer px-3 py-3 md:py-1 text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800") Editar
 
-                      form(action="#")
+                      form(action=`/propiedades/eliminar/${propiedad.id}` method="POST")
                           input(type="submit" class=`w-full cursor-pointer px-3 py-3 md:py-1 text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800` value="Eliminar")
 
 
