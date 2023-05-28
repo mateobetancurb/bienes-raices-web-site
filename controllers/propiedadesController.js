@@ -300,6 +300,27 @@ const eliminarPropiedad = async (req, res) => {
 	res.redirect("/mis-propiedades");
 };
 
+const mostrarPropiedad = async (req, res) => {
+	//validar que la propiedad exista
+	const propiedad = await Propiedad.findByPk(req.params.id, {
+		include: [
+			{ model: Categoria, as: "categoria" },
+			{ model: Precio, as: "precio" },
+		],
+  });
+
+  if (!propiedad) {
+    return res.redirect("/404");
+  }
+
+	res.render("propiedades/mostrar", {
+		propiedad,
+		pagina: propiedad.titulo,
+		categoria: propiedad.categoria.nombre,
+		precio: propiedad.precio.nombre,
+	});
+};
+
 module.exports = {
 	admin,
 	crearPropiedad,
@@ -309,4 +330,5 @@ module.exports = {
 	editarPropiedad,
 	guardarPropiedadEditada,
 	eliminarPropiedad,
+	mostrarPropiedad,
 };
