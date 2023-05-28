@@ -1,3 +1,4 @@
+const { unlink } = require("node:fs/promises");
 const { check, validationResult } = require("express-validator");
 const { Categoria, Precio, Propiedad } = require("../models/index.js");
 
@@ -273,6 +274,32 @@ const guardarPropiedadEditada = async (req, res) => {
 	}
 };
 
+const eliminarPropiedad = async (req, res) => {
+	//validar que la propiedad exista
+	const propiedad = await Propiedad.findByPk(req.params.id);
+
+	if (!propiedad) {
+		return res.redirect("/mis-propiedades");
+	}
+
+	//propiedad pertenece al usuario
+	if (propiedad.usuarioId !== req.usuario.id) {
+		return res.redirect("/mis-propiedades");
+	}
+
+	//eliminar la propiedad
+	try {
+		await propiedad.destroy();
+		res.redirect("/mis-propiedades");
+	} catch (error) {
+		console.log(error);
+	}
+
+	//eliminar la imagen de la propiedad
+	await unlink(`public/uploads/${propiedad.imagen}`);
+	res.redirect("/mis-propiedades");
+};
+
 module.exports = {
 	admin,
 	crearPropiedad,
@@ -281,4 +308,5 @@ module.exports = {
 	almacenarImagen,
 	editarPropiedad,
 	guardarPropiedadEditada,
+	eliminarPropiedad,
 };
