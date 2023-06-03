@@ -3,20 +3,50 @@ const { check, validationResult } = require("express-validator");
 const { Categoria, Precio, Propiedad } = require("../models/index.js");
 
 const admin = async (req, res) => {
-	const { id } = req.usuario;
-	const propiedades = await Propiedad.findAll({
-		where: {
-			usuarioId: id,
-		},
-		include: [
-			{ model: Categoria, as: "categoria" },
-			{ model: Precio, as: "precio" },
-		],
-	});
-	res.render("propiedades/admin", {
-		pagina: "Mis propiedades",
-		propiedades,
-	});
+	//leer query string
+	const { pagina: paginaActual } = req.query;
+	const expRegular = /^[1-9]$/;
+	if (!expRegular.test(paginaActual)) {
+		return res.redirect("/mis-propiedades?pagina=1");
+	}
+
+	try {
+		const { id } = req.usuario;
+
+		//limites y offset para la paginacion
+		const limit = 5;
+		const offset = paginaActual * limit - limit;
+
+		const [propiedades, total] = await Promise.all([
+			Propiedad.findAll({
+				limit,
+				offset,
+				where: {
+					usuarioId: id,
+				},
+				include: [
+					{ model: Categoria, as: "categoria" },
+					{ model: Precio, as: "precio" },
+				],
+			}),
+			Propiedad.count({
+				where: {
+					usuarioId: id,
+				},
+			}),
+		]);
+		res.render("propiedades/admin", {
+			pagina: "Mis propiedades",
+			propiedades,
+			paginas: Math.ceil(total / limit),
+			paginaActual: Number(paginaActual),
+			total,
+			offset,
+			limit,
+		});
+	} catch (error) {
+		console.log(error);
+	}
 };
 
 const crearPropiedad = async (req, res) => {
@@ -307,11 +337,11 @@ const mostrarPropiedad = async (req, res) => {
 			{ model: Categoria, as: "categoria" },
 			{ model: Precio, as: "precio" },
 		],
-  });
+	});
 
-  if (!propiedad) {
-    return res.redirect("/404");
-  }
+	if (!propiedad) {
+		return res.redirect("/404");
+	}
 
 	res.render("propiedades/mostrar", {
 		propiedad,
