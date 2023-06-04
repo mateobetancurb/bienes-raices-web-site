@@ -1,15 +1,15 @@
 const path = require("path");
 
 module.exports = {
-  mode: "development",
-  entry: {
-    mapa: "./src/js/mapa.js",
-    agregarImagen: "./src/js/agregarImagen.js",
-    mostrarMapa: "./src/js/mostrarMapa.js",
-  },
-  output: {
-    filename: "[name].js",
-    path: path.resolve("public/js")
-
-  }
+	mode: "development",
+	entry: {
+		mapa: "./src/js/mapa.js",
+		agregarImagen: "./src/js/agregarImagen.js",
+		mostrarMapa: "./src/js/mostrarMapa.js",
+		mapaInicio: "./src/js/mapaInicio.js",
+	},
+	output: {
+		filename: "[name].js",
+		path: path.resolve("public/js"),
+	},
 };
