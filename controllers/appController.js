@@ -1,3 +1,4 @@
+const { Sequelize } = require("sequelize");
 const { Categoria, Precio, Propiedad } = require("../models/index.js");
 
 const inicio = async (req, res) => {
@@ -83,8 +84,33 @@ const notFound = (req, res) => {
 	});
 };
 
-const buscador = (req, res) => {
-	res.send("buscador");
+const buscador = async (req, res) => {
+	const { busqueda } = req.body;
+
+	//validar que el usuario escriba algo
+	if (!busqueda.trim()) {
+		res.redirect("back");
+	}
+
+	//filtrar las propiedades
+	const propiedades = await Propiedad.findAll({
+		where: {
+			titulo: {
+				[Sequelize.Op.like]: "%" + busqueda + "%",
+			},
+		},
+		include: [
+			{
+				model: Precio,
+				as: "precio",
+			},
+		],
+	});
+
+	res.render("busqueda", {
+		pagina: `Resultados de la búsqueda: ${busqueda}`,
+		propiedades,
+	});
 };
 
 module.exports = {
