@@ -1,0 +1,12 @@
+extends ./layout/app
+
+block contenido
+    section(class="py-5")
+        h2(class="text-center text-3xl font-extrabold py-10")= pagina
+
+        if(propiedades.length === 0)
+            p(class="text-center text-gray-600") No hay propiedades para mostrar
+        else
+        div(class="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-5")
+            each propiedad in propiedades
+              include ./templates/card

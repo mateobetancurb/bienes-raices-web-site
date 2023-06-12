@@ -42,7 +42,9 @@
 	};
 
   const mostrarPropiedades = (propiedades) => {
-    //limpiar los markers
+    //limpiar los markers previos
+    markers.clearLayers();
+
 
 		propiedades.forEach((propiedad) => {
 			//agregar los pines
