@@ -1,6 +1,7 @@
 const { unlink } = require("node:fs/promises");
 const { check, validationResult } = require("express-validator");
-const { Categoria, Precio, Propiedad } = require("../models/index.js");
+const { Categoria, Precio, Propiedad, Mensaje } = require("../models/index.js");
+const { esVendedor } = require("../helpers/index.js");
 
 const admin = async (req, res) => {
 	//leer query string
@@ -348,7 +349,57 @@ const mostrarPropiedad = async (req, res) => {
 		pagina: propiedad.titulo,
 		categoria: propiedad.categoria.nombre,
 		precio: propiedad.precio.nombre,
+		usuario: req.usuario,
+		esVendedor: esVendedor(req.usuario?.id, propiedad.usuarioId),
 	});
+};
+
+const enviarMensaje = async (req, res) => {
+	//validar que la propiedad exista
+	const propiedad = await Propiedad.findByPk(req.params.id, {
+		include: [
+			{ model: Categoria, as: "categoria" },
+			{ model: Precio, as: "precio" },
+		],
+	});
+
+	if (!propiedad) {
+		return res.sendStatus(404).redirect("/404");
+	}
+
+	//validar mensaje desde el cliente
+	await check("mensaje")
+		.notEmpty()
+		.withMessage("Escribe un mensaje válido")
+		.isLength({ max: 200, min: 10 })
+		.run(req);
+
+	let resultado = validationResult(req);
+
+	if (!resultado.isEmpty()) {
+		return res.render("propiedades/mostrar", {
+			propiedad,
+			pagina: propiedad.titulo,
+			usuario: req.usuario,
+			esVendedor: esVendedor(req.usuario?.id, propiedad.usuarioId),
+			errores: resultado.array(),
+			enviado: true,
+		});
+	}
+	//almacenar el mensaje
+	const { mensaje } = req.body;
+	const { id: propiedadId } = req.params;
+	const { id: usuarioId } = req.usuario;
+	try {
+		await Mensaje.create({
+			mensaje,
+			propiedadId,
+			usuarioId,
+		});
+		res.redirect("/");
+	} catch (error) {
+		console.log(error);
+	}
 };
 
 module.exports = {
@@ -361,4 +412,5 @@ module.exports = {
 	guardarPropiedadEditada,
 	eliminarPropiedad,
 	mostrarPropiedad,
+	enviarMensaje,
 };
