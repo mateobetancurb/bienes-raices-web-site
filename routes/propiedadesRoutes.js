@@ -7,11 +7,13 @@ const {
 	agregarImagen,
 	almacenarImagen,
 	editarPropiedad,
-  guardarPropiedadEditada,
-  eliminarPropiedad,
-  mostrarPropiedad
+	guardarPropiedadEditada,
+	eliminarPropiedad,
+  mostrarPropiedad,
+  enviarMensaje,
 } = require("../controllers/propiedadesController.js");
 const protegerRuta = require("../middlewares/protegerRuta.js");
+const identificarUsuario = require("../middlewares/identificarUsuario.js");
 const upload = require("../middlewares/subirImagen.js");
 
 router.get("/mis-propiedades", protegerRuta, admin);
@@ -29,6 +31,9 @@ router.post("/propiedades/editar/:id", protegerRuta, guardarPropiedadEditada);
 router.post("/propiedades/eliminar/:id", protegerRuta, eliminarPropiedad);
 
 //area publica
-router.get("/propiedad/:id", mostrarPropiedad);
+router.get("/propiedad/:id", identificarUsuario, mostrarPropiedad);
+
+//almacenar los mensajes
+router.post("/propiedad/:id", identificarUsuario, enviarMensaje);
 
 module.exports = router;
