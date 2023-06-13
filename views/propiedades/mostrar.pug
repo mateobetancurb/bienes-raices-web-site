@@ -12,7 +12,7 @@ block contenido
         a(href="#" class="font-bold text-gray-600 text-sm") Categoría:
           span(class="font-normal")=propiedad.categoria.nombre
 
-      div(class="mt-5 md:flex md:gap-4")
+      div(class="mt-5 md:flex md:gap-4 md:items-start")
         div(class="md:w-2/3 bg-white shadow rounded-lg")
             img(src=`/uploads/${propiedad.imagen}` alt=`Imagen de la propiedad ${propiedad.titulo}` class="w-full rounded-lg block")
 
@@ -44,6 +44,26 @@ block contenido
             div(class="p-5")
                 p(class="text-gray-600 font-bold text-xs") Dirección
                   span(class="text-gray-800 block text-lg")=propiedad.calle
+
+                if !esVendedor
+                  h3(class="text-2xl text-center my-10 font-extrabold text-gray-900") Vendedor
+
+                  if usuario
+                    if errores
+                          div(class="max-w-md mx-auto my-10")
+                            each error in errores
+                              p.bg-red-200.text-red-900.rounded-lg.text-sm.text-center.font-bold.p-3.mb-1=error.msg
+
+                    form(method="POST")
+                      div(class="space-y-5")
+                          label(for="mensaje" class="text-gray-600 font-bold text-xs") Mensaje
+                          textarea(name="mensaje" id="mensaje" placeholder="Escribe aquí el mensaje para el vendedor" class="w-full p-2 border border-gray-300 rounded-lg shadow placeholder-gray-400")
+                          input(type="submit" value="Enviar" class="w-full bg-indigo-600 py-2 px-5 rounded-full font-bold text-sm text-white hover:bg-indigo-800 transition-colors cursor-pointer")
+                  else
+                      div(class="flex justify-center gap-2")
+                          p(class="text-sm") Si quieres contactar al vendedor
+                          a(href="/auth/login" class="text-indigo-700 underline font-bold text-sm cursor-pointer hover:text-indigo-900") debes registrarte
+
 
 block scripts
     script(src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js")
