@@ -1,7 +1,13 @@
 const { unlink } = require("node:fs/promises");
 const { check, validationResult } = require("express-validator");
-const { Categoria, Precio, Propiedad, Mensaje } = require("../models/index.js");
-const { esVendedor } = require("../helpers/index.js");
+const {
+	Categoria,
+	Precio,
+	Propiedad,
+	Mensaje,
+	Usuario,
+} = require("../models/index.js");
+const { esVendedor, formatearFecha } = require("../helpers/index.js");
 
 const admin = async (req, res) => {
 	//leer query string
@@ -28,6 +34,7 @@ const admin = async (req, res) => {
 				include: [
 					{ model: Categoria, as: "categoria" },
 					{ model: Precio, as: "precio" },
+					{ model: Mensaje, as: "mensajes" },
 				],
 			}),
 			Propiedad.count({
@@ -331,6 +338,11 @@ const eliminarPropiedad = async (req, res) => {
 	res.redirect("/mis-propiedades");
 };
 
+//modificar el estado de la propiedad
+const cambiarEstado = async (req, res) => {
+  console.log("cambiar estado");
+}
+
 const mostrarPropiedad = async (req, res) => {
 	//validar que la propiedad exista
 	const propiedad = await Propiedad.findByPk(req.params.id, {
@@ -402,6 +414,37 @@ const enviarMensaje = async (req, res) => {
 	}
 };
 
+//leer mensajes recibidos
+const verMensajes = async (req, res) => {
+	const { id } = req.params;
+
+	//validar que la propiedad exista
+	const propiedad = await Propiedad.findByPk(id, {
+		include: [
+			{
+				model: Mensaje,
+				as: "mensajes",
+				include: [{ model: Usuario.scope("eliminarPassword"), as: "usuario" }],
+			},
+		],
+	});
+
+	if (!propiedad) {
+		return res.redirect("/mis-propiedades");
+	}
+
+	//validar que la propiedad pertenezca al usuario
+	if (propiedad.usuarioId !== req.usuario.id) {
+		return res.redirect("/mis-propiedades");
+	}
+
+	res.render("propiedades/mensajes", {
+		pagina: "Mensajes recibidos",
+		mensajes: propiedad.mensajes,
+		formatearFecha,
+	});
+};
+
 module.exports = {
 	admin,
 	crearPropiedad,
@@ -410,7 +453,9 @@ module.exports = {
 	almacenarImagen,
 	editarPropiedad,
 	guardarPropiedadEditada,
-	eliminarPropiedad,
+  eliminarPropiedad,
+  cambiarEstado,
 	mostrarPropiedad,
 	enviarMensaje,
+	verMensajes,
 };
