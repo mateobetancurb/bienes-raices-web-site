@@ -8,9 +8,11 @@ const {
 	almacenarImagen,
 	editarPropiedad,
 	guardarPropiedadEditada,
-	eliminarPropiedad,
+  eliminarPropiedad,
+  cambiarEstado,
   mostrarPropiedad,
   enviarMensaje,
+  verMensajes
 } = require("../controllers/propiedadesController.js");
 const protegerRuta = require("../middlewares/protegerRuta.js");
 const identificarUsuario = require("../middlewares/identificarUsuario.js");
@@ -29,11 +31,15 @@ router.post(
 router.get("/propiedades/editar/:id", protegerRuta, editarPropiedad);
 router.post("/propiedades/editar/:id", protegerRuta, guardarPropiedadEditada);
 router.post("/propiedades/eliminar/:id", protegerRuta, eliminarPropiedad);
+router.put("/propiedades/:id", protegerRuta, cambiarEstado);
 
 //area publica
 router.get("/propiedad/:id", identificarUsuario, mostrarPropiedad);
 
 //almacenar los mensajes
 router.post("/propiedad/:id", identificarUsuario, enviarMensaje);
+
+//leer mensajes recibidos
+router.get("/mensajes/:id", protegerRuta, verMensajes);
 
 module.exports = router;
