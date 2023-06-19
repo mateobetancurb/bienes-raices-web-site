@@ -340,8 +340,23 @@ const eliminarPropiedad = async (req, res) => {
 
 //modificar el estado de la propiedad
 const cambiarEstado = async (req, res) => {
-  console.log("cambiar estado");
-}
+	const propiedad = await Propiedad.findByPk(req.params.id);
+
+	if (!propiedad) {
+		return res.redirect("/mis-propiedades");
+	}
+
+	//propiedad pertenece al usuario
+	if (propiedad.usuarioId !== req.usuario.id) {
+		return res.redirect("/mis-propiedades");
+	}
+
+	//cambiar el estado de la propiedad
+	propiedad.publicado = !propiedad.publicado;
+
+	await propiedad.save();
+	res.json({ resultado: "ok" });
+};
 
 const mostrarPropiedad = async (req, res) => {
 	//validar que la propiedad exista
@@ -352,7 +367,7 @@ const mostrarPropiedad = async (req, res) => {
 		],
 	});
 
-	if (!propiedad) {
+	if (!propiedad || !propiedad.publicado) {
 		return res.redirect("/404");
 	}
 
@@ -453,8 +468,8 @@ module.exports = {
 	almacenarImagen,
 	editarPropiedad,
 	guardarPropiedadEditada,
-  eliminarPropiedad,
-  cambiarEstado,
+	eliminarPropiedad,
+	cambiarEstado,
 	mostrarPropiedad,
 	enviarMensaje,
 	verMensajes,
