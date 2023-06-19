@@ -30,9 +30,10 @@ block contenido
                         </svg>
                         p=propiedad.precio.nombre
 
+                      a(href=`/mensajes/${propiedad.id}` class="pt-5 text-center cursor-pointer px-3 py-3 md:py-1 text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800")=` ${propiedad.mensajes.length} Mensajes `
+
                   div(class="sm:w-1/4 md:w-2/6 lg:flex-1 flex flex-col gap-2 lg:flex-row")
-                      form(action="#")
-                          input(type="submit" class=`w-full cursor-pointer px-3 py-3 md:py-1 text-xs leading-5 font-semibold rounded-full ${propiedad.publicado ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}` value=`${propiedad.publicado ? "Publicado" : "No publicado"}`)
+                      button(type="button" data-propiedad-id=`${propiedad.id}` class=`cambiar-estado w-full cursor-pointer px-3 py-3 md:py-1 text-xs leading-5 font-semibold rounded-full ${propiedad.publicado ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`)=`${propiedad.publicado ? "Publicado" : "No publicado"}`
 
                       a(href=`/propiedades/editar/${propiedad.id}` class="text-center cursor-pointer px-3 py-3 md:py-1 text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800") Editar
 
@@ -58,3 +59,6 @@ block contenido
 
     else
       p.text-center No hay propiedades publicadas
+
+block scripts
+  script(src="/js/cambiarEstado.js")
