@@ -4,6 +4,7 @@ const router = express.Router();
 const {
 	formularioLogin,
 	autenticarUsuario,
+	cerrarSesion,
 	formularioRegistro,
 	registrar,
 	confirmarCuenta,
@@ -15,6 +16,7 @@ const {
 
 router.get("/login", formularioLogin);
 router.post("/login", autenticarUsuario);
+router.post("/cerrar-sesion", cerrarSesion);
 router.get("/registro", formularioRegistro);
 router.post("/registro", registrar);
 router.get("/confirmar/:token", confirmarCuenta);
