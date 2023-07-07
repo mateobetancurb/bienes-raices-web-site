@@ -1,4 +1,7 @@
 {
+   "engines": {
+  "node": "18.15.0"
+},
   "name": "bienes-raices-web-site",
   "version": "1.0.0",
   "description": "sitio web de bienes raices",
